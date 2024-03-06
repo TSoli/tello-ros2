@@ -6,6 +6,8 @@ workspace/src/build/
 workspace/src/lib/
 workspace/src/install/
 
+**/ORBvoc.txt
+
 .vscode/.ropeproject/
 
 log/
