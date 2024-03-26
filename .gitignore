@@ -5,6 +5,7 @@ workspace/src/__pycache__/
 workspace/src/build/
 workspace/src/lib/
 workspace/src/install/
+workspace/.cache/
 
 **/ORBvoc.txt
 
@@ -49,3 +50,7 @@ libs/
 *.exe
 *.out
 *.app
+
+# videos
+*.mp4
+*.avi

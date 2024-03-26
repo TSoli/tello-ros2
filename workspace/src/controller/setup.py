@@ -18,6 +18,9 @@ setup(
     license="Apache-2.0",
     tests_require=["pytest"],
     entry_points={
-        "console_scripts": ["controller = controller.main:main"],
+        "console_scripts": [
+            "controller = controller.main:main",
+            "send_video = send_video.send_video:main",
+        ],
     },
 )
