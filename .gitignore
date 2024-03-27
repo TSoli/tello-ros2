@@ -54,3 +54,6 @@ libs/
 # videos
 *.mp4
 *.avi
+
+# starttime logging
+**/*start_time.yml
