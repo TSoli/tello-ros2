@@ -154,15 +154,6 @@ class TelloNode:
                     msg.linear_acceleration.x = self.tello.get_acceleration_x() / 100.0
                     msg.linear_acceleration.y = self.tello.get_acceleration_y() / 100.0
                     msg.linear_acceleration.z = self.tello.get_acceleration_z() / 100.0
-                    msg.angular_velocity.x = (
-                        self.tello.get_angular_velocity_x(rate) * deg_to_rad
-                    )
-                    msg.angular_velocity.y = (
-                        self.tello.get_angular_velocity_y(rate) * deg_to_rad
-                    )
-                    msg.angular_velocity.z = (
-                        self.tello.get_angular_velocity_z(rate) * deg_to_rad
-                    )
                     msg.orientation.x = q[0]
                     msg.orientation.y = q[1]
                     msg.orientation.z = q[2]
