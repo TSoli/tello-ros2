@@ -16,6 +16,7 @@ def generate_launch_description():
                 {"tello_ip": "192.168.10.1"},
                 {"tf_base": "map"},
                 {"tf_drone": "drone"},
+                {"camera_info_file": "./cam_info.yml"},
             ],
             remappings=[("/image_raw", "/camera")],
             respawn=True,

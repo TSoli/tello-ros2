@@ -58,7 +58,7 @@ class TelloNode:
 
         # Read camera info from YAML file
         with open(self.camera_info_file, "r") as file:
-            self.camera_info = yaml.load(file, Loader=yaml.FullLoader)
+            self.camera_info = yaml.load(file, Loader=yaml.CLoader)
             # self.node.get_logger().info('Tello: Camera information YAML' + self.camera_info.__str__())
 
         # Configure drone connection
@@ -252,13 +252,12 @@ class TelloNode:
                 # Camera info
                 if self.pub_camera_info.get_subscription_count() > 0:
                     msg = CameraInfo()
-                    msg.height = self.camera_info.image_height
-                    msg.width = self.camera_info.image_width
-                    msg.distortion_model = self.camera_info.distortion_model
-                    msg.D = self.camera_info.distortion_coefficients
-                    msg.K = self.camera_info.camera_matrix
-                    msg.R = self.camera_info.rectification_matrix
-                    msg.P = self.camera_info.projection_matrix
+                    msg.height = self.camera_info.get("image_height")
+                    msg.width = self.camera_info.get("image_width")
+                    msg.distortion_model = self.camera_info.get("distortion_model")
+                    msg.d = self.camera_info.get("distortion_coefficients")
+                    msg.k = self.camera_info.get("camera_matrix")
+                    msg.p = self.camera_info.get("projection_matrix")
                     self.pub_camera_info.publish(msg)
 
                 # Sleep
