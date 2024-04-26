@@ -15,10 +15,10 @@ def generate_launch_description():
                 {"connect_timeout": 10.0},
                 {"tello_ip": "192.168.10.1"},
                 {"tf_base": "map"},
-                {"tf_drone": "drone"},
+                {"tf_drone": "camera"},
                 {"camera_info_file": "./cam_info.yml"},
             ],
-            remappings=[("/image_raw", "/camera")],
+            remappings=[("/image_raw", "/camera/image")],
             respawn=True,
         ),
         # Tello control node
@@ -50,14 +50,14 @@ def generate_launch_description():
         #     arguments=["-d", "/home/tentone/Git/tello-slam/workspace/src/rviz.rviz"],
         # ),
         # Static TF publisher
-        Node(
-            package="tf2_ros",
-            executable="static_transform_publisher",
-            namespace="/",
-            name="tf",
-            arguments=["0", "0", "0", "0", "0", "0", "1", "map", "drone"],
-            respawn=True,
-        ),
+        # Node(
+        #     package="tf2_ros",
+        #     executable="static_transform_publisher",
+        #     namespace="/",
+        #     name="tf",
+        #     arguments=["0", "0", "0", "0", "0", "0", "1", "map", "drone"],
+        #     respawn=True,
+        # ),
         # ORB SLAM
         # Node(
         #     package='orbslam2',

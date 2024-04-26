@@ -77,6 +77,9 @@ class TelloNode:
         self.setup_publishers()
         self.setup_subscribers()
 
+        # send camera transform
+        self.send_camera_to_base_tf()
+
         # Processing threads
         self.start_video_capture()
         self.start_tello_status()
@@ -94,6 +97,7 @@ class TelloNode:
         self.pub_battery = self.node.create_publisher(BatteryState, "battery", 1)
         self.pub_temperature = self.node.create_publisher(Temperature, "temperature", 1)
         self.pub_odom = self.node.create_publisher(Odometry, "odom", 1)
+        self.static_tf_broadcaster = tf2_ros.StaticTransformBroadcaster(self.node)
 
         # TF broadcaster
         if self.tf_pub:
@@ -115,6 +119,22 @@ class TelloNode:
         self.sub_wifi_config = self.node.create_subscription(
             TelloWifiConfig, "wifi_config", self.cb_wifi_config, 1
         )
+
+    def send_camera_to_base_tf(self) -> None:
+        t = TransformStamped()
+        t.header.stamp = self.node.get_clock().now().to_msg()
+        t.header.frame_id = "camera"
+        t.child_frame_id = "base_link"
+
+        t.transform.translation.x = 0.0
+        t.transform.translation.y = 0.0
+        t.transform.translation.z = 0.0
+        t.transform.rotation.w = 1.0
+        t.transform.rotation.x = 0.0
+        t.transform.rotation.y = 0.0
+        t.transform.rotation.z = 0.0
+
+        self.static_tf_broadcaster.sendTransform(t)
 
     # Get the orientation of the drone as a quaternion
     def get_orientation_quaternion(self):
@@ -249,17 +269,6 @@ class TelloNode:
                     msg.serial_number = self.tello.query_serial_number()
                     self.pub_id.publish(msg)
 
-                # Camera info
-                if self.pub_camera_info.get_subscription_count() > 0:
-                    msg = CameraInfo()
-                    msg.height = self.camera_info.get("image_height")
-                    msg.width = self.camera_info.get("image_width")
-                    msg.distortion_model = self.camera_info.get("distortion_model")
-                    msg.d = self.camera_info.get("distortion_coefficients")
-                    msg.k = self.camera_info.get("camera_matrix")
-                    msg.p = self.camera_info.get("projection_matrix")
-                    self.pub_camera_info.publish(msg)
-
                 # Sleep
                 time.sleep(rate)
 
@@ -288,6 +297,18 @@ class TelloNode:
                 # Publish opencv frame using CV bridge
                 msg = self.bridge.cv2_to_imgmsg(numpy.array(frame), "bgr8", header)
                 self.pub_image_raw.publish(msg)
+
+                # Camera info
+                if self.pub_camera_info.get_subscription_count() > 0:
+                    info_msg = CameraInfo()
+                    info_msg.header = msg.header
+                    info_msg.height = self.camera_info.get("image_height")
+                    info_msg.width = self.camera_info.get("image_width")
+                    info_msg.distortion_model = self.camera_info.get("distortion_model")
+                    info_msg.d = self.camera_info.get("distortion_coefficients")
+                    info_msg.k = self.camera_info.get("camera_matrix")
+                    info_msg.p = self.camera_info.get("projection_matrix")
+                    self.pub_camera_info.publish(info_msg)
 
                 time.sleep(rate)
 
