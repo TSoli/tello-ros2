@@ -8,7 +8,6 @@ import time
 import ament_index_python
 import av
 import cv2
-import numpy
 import rclpy
 import tf2_ros
 import yaml
@@ -290,12 +289,13 @@ class TelloNode:
             while True:
                 # Get frame from drone
                 frame = frame_read.frame
+                frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
                 header = HeaderMsg()
                 header.stamp = self.node.get_clock().now().to_msg()
                 header.frame_id = self.tf_drone
                 # Publish opencv frame using CV bridge
-                msg = self.bridge.cv2_to_imgmsg(numpy.array(frame), "bgr8", header)
+                msg = self.bridge.cv2_to_imgmsg(frame, "bgr8", header)
                 self.pub_image_raw.publish(msg)
 
                 # Camera info

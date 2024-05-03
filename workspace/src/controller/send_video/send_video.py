@@ -3,6 +3,7 @@ from pathlib import Path
 
 import cv2
 import rclpy
+import tf2_ros
 from cv_bridge import CvBridge
 from rclpy.node import Node
 from sensor_msgs.msg import Image as ImageMsg
@@ -15,8 +16,9 @@ class SendVideo(Node):
 
         self.declare_parameter("filename", "")
         self.cv_bridge = CvBridge()
-        self.image_pub = self.create_publisher(ImageMsg, "camera", 10)
+        self.image_pub = self.create_publisher(ImageMsg, "camera/image", 10)
         self.video = self._get_video()
+        self.tf_static_broadcaster = tf2_ros.TransformBroadcaster(self)
         self.start_time = None
 
         fps = self.video.get(cv2.CAP_PROP_FPS)
