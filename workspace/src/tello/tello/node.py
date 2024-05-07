@@ -173,10 +173,10 @@ class TelloNode:
                     msg.linear_acceleration.x = self.tello.get_acceleration_x() / 100.0
                     msg.linear_acceleration.y = self.tello.get_acceleration_y() / 100.0
                     msg.linear_acceleration.z = self.tello.get_acceleration_z() / 100.0
-                    msg.orientation.x = q[0]
-                    msg.orientation.y = q[1]
-                    msg.orientation.z = q[2]
-                    msg.orientation.w = q[3]
+                    msg.orientation.w = q[0]
+                    msg.orientation.x = q[1]
+                    msg.orientation.y = q[2]
+                    msg.orientation.z = q[3]
                     self.pub_imu.publish(msg)
 
                 # Odometry
@@ -186,10 +186,10 @@ class TelloNode:
                     odom_msg = Odometry()
                     odom_msg.header.stamp = self.node.get_clock().now().to_msg()
                     odom_msg.header.frame_id = self.tf_base
-                    odom_msg.pose.pose.orientation.x = q[0]
-                    odom_msg.pose.pose.orientation.y = q[1]
-                    odom_msg.pose.pose.orientation.z = q[2]
-                    odom_msg.pose.pose.orientation.w = q[3]
+                    odom_msg.pose.pose.orientation.w = q[0]
+                    odom_msg.pose.pose.orientation.x = q[1]
+                    odom_msg.pose.pose.orientation.y = q[2]
+                    odom_msg.pose.pose.orientation.z = q[3]
                     odom_msg.twist.twist.linear.x = (
                         float(self.tello.get_speed_x()) / 100.0
                     )
@@ -373,7 +373,7 @@ def euler_to_quaternion(r):
     qw = math.cos(roll / 2) * math.cos(pitch / 2) * math.cos(yaw / 2) + math.sin(
         roll / 2
     ) * math.sin(pitch / 2) * math.sin(yaw / 2)
-    return [qx, qy, qz, qw]
+    return [qw, qx, qy, qz]
 
 
 # Convert rotation from quaternion to euler.
