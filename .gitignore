@@ -57,3 +57,6 @@ libs/
 
 # starttime logging
 **/*start_time.yml
+
+# images
+**/images*/*

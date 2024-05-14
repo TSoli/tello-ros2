@@ -20,7 +20,8 @@ setup(
     entry_points={
         "console_scripts": [
             "controller = controller.main:main",
-            "send_video = send_video.send_video:main",
+            "send_video = video.send_video:main",
+            "take_photos = video.take_photos:main",
         ],
     },
 )
